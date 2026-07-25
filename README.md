@@ -3,7 +3,7 @@ SIH 2026 project for digital public toilet cleaning management, citizen complain
 
 
 <p align="center">
-  <img src="./public/toilet-icon.jpg" width="180" alt="Public Toilet Cleaning Logo">
+  <img src=".SIH/public/toilet-icon.jpg" width="180" alt="Public Toilet Cleaning Logo">
 </p>
 
 <p align="center">

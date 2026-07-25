@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Public Toilet Register</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="login-container">
+    <div class="login-box">
+        <div class="login-icon">🚻</div>
+        <h1>Public Toilet Register</h1>
+        <p class="login-subtitle">Select your portal to continue</p>
+
+        <!-- Portal Toggle Buttons -->
+        <div class="portal-toggle">
+            <button class="toggle-btn active" id="adminToggle" onclick="togglePortal('admin')">
+                <span class="toggle-indicator"></span>
+                Admin Portal
+            </button>
+            <button class="toggle-btn" id="citizenToggle" onclick="togglePortal('citizen')">
+                <span class="toggle-indicator"></span>
+                Citizen Portal
+            </button>
+            <button class="toggle-btn" id="trackToggle" onclick="togglePortal('track')">
+                <span class="toggle-indicator"></span>
+                Track Complaint
+            </button>
+        </div>
+
+        <!-- Admin Login Form -->
+        <div id="adminPortal" class="portal-content active">
+            <form id="adminForm" class="login-form">
+                <h3>👨‍💼 Admin Login</h3>
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit" class="btn-login">Login</button>
+            </form>
+        </div>
+
+        <!-- Citizen Complaint Form -->
+        <div id="citizenPortal" class="portal-content">
+            <form id="citizenForm" class="login-form">
+                <h3>📝 Submit Complaint</h3>
+                
+                <input type="text" id="citizenName" placeholder="Full Name" required>
+                
+                <input type="tel" id="citizenMobile" placeholder="Mobile Number" required>
+                
+                <div class="form-group">
+                    <label>Toilet Location</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="location" value="Central Bus Stand" required>
+                            Central Bus Stand
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="location" value="City Park">
+                            City Park
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="location" value="Railway Station">
+                            Railway Station
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="location" value="Beach Road">
+                            Beach Road
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="location" value="Market Area">
+                            Market Area
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="location" value="Government Hospital">
+                            Government Hospital
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="location" value="Shopping Mall">
+                            Shopping Mall
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="location" value="School Campus">
+                            School Campus
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="location" value="Temple Street">
+                            Temple Street
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="location" value="Bus Depot">
+                            Bus Depot
+                        </label>
+                    </div>
+                </div>
+
+                <textarea id="complaintDetails" rows="4" placeholder="Describe your complaint in detail..." required></textarea>
+                
+                <button type="submit" class="btn-login" style="background: linear-gradient(135deg, #22c55e, #16a34a);">
+                    📤 Submit Complaint
+                </button>
+            </form>
+        </div>
+
+        <!-- Track Complaint Section -->
+        <div id="trackPortal" class="portal-content">
+            <form id="trackForm" class="login-form">
+                <h3>🔍 Track Your Complaint</h3>
+                <p style="color: #64748b; font-size: 14px; margin-bottom: 15px; text-align: center;">
+                    Enter your Complaint ID to check the current status
+                </p>
+                
+                <input type="text" id="trackComplaintId" placeholder="Enter Complaint ID (e.g., PTC20260725001)" required>
+                
+                <button type="submit" class="btn-login" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                    🔍 Track Complaint
+                </button>
+            </form>
+            <div id="trackResult" style="display: none; margin-top: 20px;"></div>
+        </div>
+
+        <div id="message"></div>
+    </div>
+</div>
+
+<script src="login.js"></script>
+
+</body>
+</html>

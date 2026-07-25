@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Record Details</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>📋 Record Details</h1>
+</header>
+
+<div class="detail-container">
+
+    <div class="detail-card">
+        <!-- Days Since Cleaning - Prominently at top -->
+        <div class="days-banner" id="daysSinceBanner">
+            <span class="days-icon">📅</span>
+            <span id="daysSince">Days Since Cleaning : 0</span>
+        </div>
+
+        <hr>
+
+        <!-- Record Information -->
+        <div class="detail-grid">
+            <div class="detail-item">
+                <span class="detail-label">Record ID</span>
+                <span class="detail-value" id="recordId">-</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Block ID</span>
+                <span class="detail-value" id="blockId">-</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Location</span>
+                <span class="detail-value" id="location">-</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Cleaner</span>
+                <span class="detail-value" id="cleaner">Not Assigned</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Cleaning Date</span>
+                <span class="detail-value" id="cleaningDate">Not Set</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Complaint</span>
+                <span class="detail-value" id="complaint">No Complaint</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Complaint Date</span>
+                <span class="detail-value" id="complaintDate">-</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Status</span>
+                <span class="detail-value" id="statusDisplay">-</span>
+            </div>
+        </div>
+
+        <!-- Citizen Info (if citizen complaint) -->
+        <div id="citizenInfo" style="display:none; background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 8px; padding: 15px; margin: 15px 0;">
+            <h4 style="color: #16a34a; margin-bottom: 10px;">👤 Citizen Information</h4>
+            <div class="detail-item">
+                <span class="detail-label">Citizen Name</span>
+                <span class="detail-value" id="citizenName">N/A</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Citizen Mobile</span>
+                <span class="detail-value" id="citizenMobile">N/A</span>
+            </div>
+        </div>
+
+        <!-- Admin Resolution Section -->
+        <div class="admin-resolution">
+            <h3>🔧 Admin Resolution</h3>
+            
+            <!-- Cleaner Selection -->
+            <div class="form-group">
+                <label for="cleanerSelect">Select Cleaner:</label>
+                <select id="cleanerSelect">
+                    <option value="">-- Select Cleaner --</option>
+                    <option value="Kumar">Kumar</option>
+                    <option value="Ravi">Ravi</option>
+                    <option value="Arun">Arun</option>
+                    <option value="Suresh">Suresh</option>
+                    <option value="Mani">Mani</option>
+                    <option value="Priya">Priya</option>
+                    <option value="Anitha">Anitha</option>
+                    <option value="Karthik">Karthik</option>
+                    <option value="Selvi">Selvi</option>
+                    <option value="Vijay">Vijay</option>
+                    <option value="Ramesh">Ramesh</option>
+                    <option value="Ashwin">Ashwin</option>
+                    <option value="Rajesh">Rajesh</option>
+                    <option value="Kishore">Kishore</option>
+                    <option value="Vimal">Vimal</option>
+                </select>
+            </div>
+
+            <!-- Cleaning Date -->
+            <div class="form-group">
+                <label for="cleaningDateInput">Cleaning Date:</label>
+                <input type="date" id="cleaningDateInput">
+            </div>
+
+            <!-- Status Selection -->
+            <div class="form-group">
+                <label for="statusSelect">Update Status:</label>
+                <select id="statusSelect">
+                    <option value="Pending">⏳ Pending</option>
+                    <option value="In Progress">🔄 In Progress</option>
+                    <option value="Resolved">✅ Resolved</option>
+                </select>
+            </div>
+
+            <button onclick="updateRecord()" class="btn-update">
+                ✅ Update Record
+            </button>
+            <span id="updateMessage"></span>
+        </div>
+
+        <button onclick="window.location.href='index.html'" class="btn-back">
+            ← Back to Dashboard
+        </button>
+    </div>
+
+</div>
+
+<script src="detail.js"></script>
+
+</body>
+</html>

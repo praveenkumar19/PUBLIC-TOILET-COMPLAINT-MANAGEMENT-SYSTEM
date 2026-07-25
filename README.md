@@ -235,7 +235,7 @@ https://github.com/user-attachments/assets/967fa047-262d-4827-bae0-78ed8fbadadc
 
 ## Prensentation Slides
 
-[Public-Toilet-Explaination.pdf](https://github.com/user-attachments/files/30375602/Public-Toilet-Explaination.pdf)
+**[View Presentation on Google Drive](https://drive.google.com/file/d/1qNT8xJwufrBFC7jPNlyDbgLFgDdQmSts/view)**
 
 
 ---

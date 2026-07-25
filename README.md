@@ -227,6 +227,12 @@ http://localhost:3000
 
 <img width="1918" height="1078" alt="Screenshot 2026-07-25 134500" src="https://github.com/user-attachments/assets/e7bb2260-c753-432b-9af7-53aa2ad50cfb" />
 
+## Explaination Video
+
+
+https://github.com/user-attachments/assets/967fa047-262d-4827-bae0-78ed8fbadadc
+
+
 
 ---
 

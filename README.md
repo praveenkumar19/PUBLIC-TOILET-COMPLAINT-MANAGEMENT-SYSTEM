@@ -1,3 +1,5 @@
+
+
 # PUBLIC-TOILET-COMPLAINT-MANAGEMENT-SYSTEM
 SIH 2026 project for digital public toilet cleaning management, citizen complaint registration, and real-time complaint tracking.
 
@@ -229,9 +231,11 @@ http://localhost:3000
 
 ## Explaination Video
 
-
 https://github.com/user-attachments/assets/967fa047-262d-4827-bae0-78ed8fbadadc
 
+## Prensentation Slides
+
+[Public-Toilet-Explaination.pdf](https://github.com/user-attachments/files/30375602/Public-Toilet-Explaination.pdf)
 
 
 ---

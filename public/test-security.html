@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔐 Security Test - Admin Authorization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f1f5f9;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #0f172a;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        .test-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 4px solid #3b82f6;
+        }
+        .test-section.danger {
+            border-left-color: #ef4444;
+        }
+        .test-section.success {
+            border-left-color: #22c55e;
+        }
+        .test-section.info {
+            border-left-color: #8b5cf6;
+        }
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .test-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-200 {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .badge-401 {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .badge-403 {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        .test-description {
+            color: #475569;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .test-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+        button:hover {
+            transform: scale(1.02);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        .btn-success {
+            background: #22c55e;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #16a34a;
+        }
+        .btn-purple {
+            background: #8b5cf6;
+            color: white;
+        }
+        .btn-purple:hover {
+            background: #7c3aed;
+        }
+        .btn-gray {
+            background: #e2e8f0;
+            color: #475569;
+        }
+        .btn-gray:hover {
+            background: #cbd5e1;
+        }
+        .result-box {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            display: none;
+        }
+        .result-box.show {
+            display: block;
+        }
+        .result-box.success {
+            border-color: #22c55e;
+            background: #f0fdf4;
+        }
+        .result-box.error {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+        .result-box.info {
+            border-color: #8b5cf6;
+            background: #f5f3ff;
+        }
+        .status-line {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+        .status-line.success {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-line.error {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .status-line.info {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+        .status-icon {
+            font-size: 20px;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+        .input-group input {
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            flex: 1;
+            min-width: 150px;
+            font-size: 14px;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .summary-item {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .summary-item .label {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .summary-item .value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-top: 5px;
+        }
+        .summary-item .value.pass {
+            color: #16a34a;
+        }
+        .summary-item .value.fail {
+            color: #dc2626;
+        }
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            background: #e2e8f0;
+            padding: 5px;
+            border-radius: 10px;
+        }
+        .tab {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            background: transparent;
+            color: #64748b;
+            transition: all 0.2s;
+            flex: 1;
+        }
+        .tab.active {
+            background: white;
+            color: #0f172a;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .tab:hover:not(.active) {
+            background: rgba(255,255,255,0.5);
+        }
+        .hidden {
+            display: none;
+        }
+        @media (max-width: 600px) {
+            .test-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .input-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            🔐 Security Test: Admin Authorization
+        </h1>
+        <p class="subtitle">
+            Testing server-side authorization to prevent non-admin users from performing admin actions
+        </p>
+
+        <!-- Login Section -->
+        <div class="test-section info">
+            <div class="test-header">
+                <span class="test-title">🔑 Login</span>
+                <span class="badge badge-200">Get Token</span>
+            </div>
+            <div class="input-group">
+                <input type="text" id="loginUsername" value="admin" placeholder="Username">
+                <input type="password" id="loginPassword" value="admin123" placeholder="Password">
+                <button onclick="login()" class="btn-primary">Login</button>
+                <button onclick="loginAsUser()" class="btn-purple">Login as User</button>
+            </div>
+            <div id="loginResult"></div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('tests')">🧪 Tests</button>
+            <button class="tab" onclick="switchTab('summary')">📊 Summary</button>
+            <button class="tab" onclick="switchTab('curl')">📋 cURL Commands</button>
+        </div>
+
+        <!-- Tests Tab -->
+        <div id="testsTab">
+            <!-- Test 1: No Token -->
+            <div class="test-section danger">
+                <div class="test-header">
+                    <span class="test-title">❌ Test 1: No Token</span>
+                    <span class="badge badge-401">401 Expected</span>
+                </div>
+                <div class="test-description">
+                    Attempt to update a record WITHOUT an authentication token.
+                    This should be rejected with 401 Unauthorized.
+                </div>
+                <div class="test-actions">
+                    <button onclick="testNoToken()" class="btn-danger">Run Test</button>
+                </div>
+                <div id="test1Result" class="result-box"></div>
+            </div>
+
+            <!-- Test 2: Fake Token -->
+            <div class="test-section danger">
+                <div class="test-header">
+                    <span class="test-title">❌ Test 2: Fake Token</span>
+                    <span class="badge badge-401">401 Expected</span>
+                </div>
+                <div class="test-description">
+                    Attempt to update a record WITH a fake/invalid token.
+                    This should be rejected with 401 Unauthorized.
+                </div>
+                <div class="test-actions">
+                    <button onclick="testFakeToken()" class="btn-danger">Run Test</button>
+                </div>
+                <div id="test2Result" class="result-box"></div>
+            </div>
+
+            <!-- Test 3: User Token (Non-Admin) -->
+            <div class="test-section danger">
+                <div class="test-header">
+                    <span class="test-title">❌ Test 3: User Token (Non-Admin)</span>
+                    <span class="badge badge-403">403 Expected</span>
+                </div>
+                <div class="test-description">
+                    Attempt to update a record WITH a valid token but WITHOUT admin privileges.
+                    This should be rejected with 403 Forbidden.
+                </div>
+                <div class="test-actions">
+                    <button onclick="testUserToken()" class="btn-danger">Run Test</button>
+                </div>
+                <div id="test3Result" class="result-box"></div>
+            </div>
+
+            <!-- Test 4: Admin Token -->
+            <div class="test-section success">
+                <div class="test-header">
+                    <span class="test-title">✅ Test 4: Admin Token</span>
+                    <span class="badge badge-200">200 Expected</span>
+                </div>
+                <div class="test-description">
+                    Attempt to update a record WITH a valid admin token.
+                    This should succeed with 200 OK.
+                </div>
+                <div class="test-actions">
+                    <button onclick="testAdminToken()" class="btn-success">Run Test</button>
+                </div>
+                <div id="test4Result" class="result-box"></div>
+            </div>
+
+            <!-- Test 5: Delete with Admin Token -->
+            <div class="test-section success">
+                <div class="test-header">
+                    <span class="test-title">✅ Test 5: Delete with Admin Token</span>
+                    <span class="badge badge-200">200 Expected</span>
+                </div>
+                <div class="test-description">
+                    Attempt to delete a record WITH a valid admin token.
+                    This should succeed with 200 OK.
+                </div>
+                <div class="test-actions">
+                    <button onclick="testAdminDelete()" class="btn-success">Run Test</button>
+                </div>
+                <div id="test5Result" class="result-box"></div>
+            </div>
+
+            <!-- Test 6: Public GET -->
+            <div class="test-section info">
+                <div class="test-header">
+                    <span class="test-title">🌐 Test 6: Public GET (No Auth)</span>
+                    <span class="badge badge-200">200 Expected</span>
+                </div>
+                <div class="test-description">
+                    GET records WITHOUT authentication (public endpoint).
+                    This should work for everyone.
+                </div>
+                <div class="test-actions">
+                    <button onclick="testPublicGet()" class="btn-gray">Run Test</button>
+                </div>
+                <div id="test6Result" class="result-box"></div>
+            </div>
+        </div>
+
+        <!-- Summary Tab -->
+        <div id="summaryTab" class="hidden">
+            <div class="test-section">
+                <div class="test-header">
+                    <span class="test-title">📊 Test Summary</span>
+                </div>
+                <div class="summary-grid" id="summaryGrid">
+                    <div class="summary-item">
+                        <div class="label">Test 1: No Token</div>
+                        <div class="value" id="summary1">⏳ Pending</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="label">Test 2: Fake Token</div>
+                        <div class="value" id="summary2">⏳ Pending</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="label">Test 3: User Token</div>
+                        <div class="value" id="summary3">⏳ Pending</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="label">Test 4: Admin Token</div>
+                        <div class="value" id="summary4">⏳ Pending</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="label">Test 5: Admin Delete</div>
+                        <div class="value" id="summary5">⏳ Pending</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="label">Test 6: Public GET</div>
+                        <div class="value" id="summary6">⏳ Pending</div>
+                    </div>
+                </div>
+                <div style="margin-top: 20px; padding: 15px; background: #f8fafc; border-radius: 8px;">
+                    <h4 style="color: #0f172a; margin-bottom: 10px;">✅ Security Checklist</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 5px 0;">✅ Server-side authorization implemented</li>
+                        <li style="padding: 5px 0;">✅ Admin-only routes protected with isAdmin middleware</li>
+                        <li style="padding: 5px 0;">✅ 401 returned for missing/invalid tokens</li>
+                        <li style="padding: 5px 0;">✅ 403 returned for non-admin users</li>
+                        <li style="padding: 5px 0;">✅ Public routes remain accessible</li>
+                        <li style="padding: 5px 0;">✅ No client-side hiding of buttons (server enforces security)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- cURL Tab -->
+        <div id="curlTab" class="hidden">
+            <div class="test-section">
+                <div class="test-header">
+                    <span class="test-title">📋 cURL Commands for Testing</span>
+                </div>
+                <div style="background: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 13px; overflow-x: auto;">
+                    <pre style="margin: 0; white-space: pre-wrap; word-break: break-all;">
+# 1. Login as Admin
+curl -X POST http://localhost:3000/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin","password":"admin123"}'
+
+# 2. Login as User
+curl -X POST http://localhost:3000/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"user","password":"user123"}'
+
+# 3. Test 1: No Token (Should return 401)
+curl -X PUT http://localhost:3000/api/records/1 \
+  -H "Content-Type: application/json" \
+  -d '{"status":"Resolved"}'
+
+# 4. Test 2: Fake Token (Should return 401)
+curl -X PUT http://localhost:3000/api/records/1 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer fake_token_123" \
+  -d '{"status":"Resolved"}'
+
+# 5. Test 3: User Token (Should return 403)
+curl -X PUT http://localhost:3000/api/records/1 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer USER_TOKEN" \
+  -d '{"status":"Resolved"}'
+
+# 6. Test 4: Admin Token (Should return 200)
+curl -X PUT http://localhost:3000/api/records/1 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer ADMIN_TOKEN" \
+  -d '{"status":"Resolved","cleaner":"Admin Test"}'
+
+# 7. Test 5: Admin Delete (Should return 200)
+curl -X DELETE http://localhost:3000/api/records/1 \
+  -H "Authorization: Bearer ADMIN_TOKEN"
+
+# 8. Test 6: Public GET (Should return 200)
+curl -X GET http://localhost:3000/api/records
+                    </pre>
+                </div>
+                <div style="margin-top: 15px;">
+                    <p style="color: #64748b; font-size: 14px;">
+                        💡 Replace ADMIN_TOKEN and USER_TOKEN with actual tokens from login responses.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =========================
+        // GLOBAL STATE
+        // =========================
+
+        let adminToken = null;
+        let userToken = null;
+        let currentUser = null;
+        let testResults = {};
+
+        // =========================
+        // TAB SWITCHING
+        // =========================
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('[id$="Tab"]').forEach(t => t.classList.add('hidden'));
+            
+            if (tab === 'tests') {
+                document.querySelector('.tab:nth-child(1)').classList.add('active');
+                document.getElementById('testsTab').classList.remove('hidden');
+            } else if (tab === 'summary') {
+                document.querySelector('.tab:nth-child(2)').classList.add('active');
+                document.getElementById('summaryTab').classList.remove('hidden');
+            } else if (tab === 'curl') {
+                document.querySelector('.tab:nth-child(3)').classList.add('active');
+                document.getElementById('curlTab').classList.remove('hidden');
+            }
+        }
+
+        // =========================
+        // LOGIN FUNCTIONS
+        // =========================
+
+        async function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            const resultDiv = document.getElementById('loginResult');
+            
+            resultDiv.innerHTML = '⏳ Logging in...';
+            
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    adminToken = data.token;
+                    currentUser = data.user;
+                    resultDiv.innerHTML = `
+                        <div class="status-line success">
+                            <span class="status-icon">✅</span>
+                            Login successful! Role: <strong>${data.user.role}</strong>
+                            <br><small style="font-size: 12px;">Token: ${data.token.substring(0, 30)}...</small>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="status-line error">
+                            <span class="status-icon">❌</span>
+                            Login failed: ${data.message}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="status-line error">
+                        <span class="status-icon">❌</span>
+                        Error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function loginAsUser() {
+            const resultDiv = document.getElementById('loginResult');
+            
+            resultDiv.innerHTML = '⏳ Logging in as user...';
+            
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: 'user', password: 'user123' })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    userToken = data.token;
+                    resultDiv.innerHTML = `
+                        <div class="status-line success">
+                            <span class="status-icon">✅</span>
+                            User login successful! Role: <strong>${data.user.role}</strong>
+                            <br><small style="font-size: 12px;">Token: ${data.token.substring(0, 30)}...</small>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="status-line error">
+                            <span class="status-icon">❌</span>
+                            User login failed: ${data.message}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="status-line error">
+                        <span class="status-icon">❌</span>
+                        Error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // =========================
+        // TEST FUNCTIONS
+        // =========================
+
+        function showResult(elementId, data, status) {
+            const el = document.getElementById(elementId);
+            el.className = 'result-box show';
+            el.textContent = '';
+            
+            if (status >= 200 && status < 300) {
+                el.classList.add('success');
+            } else if (status >= 400 && status < 500) {
+                el.classList.add('error');
+            } else {
+                el.classList.add('info');
+            }
+            
+            const statusText = status === 200 ? '✅ Success' :
+                              status === 401 ? '❌ Unauthorized' :
+                              status === 403 ? '⛔ Forbidden' :
+                              `📊 Status: ${status}`;
+            
+            el.innerHTML = `Status: ${status} - ${statusText}\n\nResponse:\n${JSON.stringify(data, null, 2)}`;
+        }
+
+        function updateSummary(testId, passed, expected, actual) {
+            const el = document.getElementById(`summary${testId}`);
+            if (passed) {
+                el.className = 'value pass';
+                el.textContent = `✅ ${expected}`;
+            } else {
+                el.className = 'value fail';
+                el.textContent = `❌ Got ${actual}`;
+            }
+        }
+
+        // Test 1: No Token
+        async function testNoToken() {
+            try {
+                const response = await fetch('/api/records/1', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: 'Resolved' })
+                });
+                
+                const data = await response.json();
+                showResult('test1Result', data, response.status);
+                
+                const passed = response.status === 401;
+                updateSummary(1, passed, '401', response.status);
+            } catch (error) {
+                showResult('test1Result', { error: error.message }, 500);
+            }
+        }
+
+        // Test 2: Fake Token
+        async function testFakeToken() {
+            try {
+                const response = await fetch('/api/records/1', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer fake_token_12345'
+                    },
+                    body: JSON.stringify({ status: 'Resolved' })
+                });
+                
+                const data = await response.json();
+                showResult('test2Result', data, response.status);
+                
+                const passed = response.status === 401;
+                updateSummary(2, passed, '401', response.status);
+            } catch (error) {
+                showResult('test2Result', { error: error.message }, 500);
+            }
+        }
+
+        // Test 3: User Token (Non-Admin)
+        async function testUserToken() {
+            if (!userToken) {
+                await loginAsUser();
+            }
+            
+            if (!userToken) {
+                showResult('test3Result', { error: 'Please login as user first' }, 400);
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/records/1', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${userToken}`
+                    },
+                    body: JSON.stringify({ status: 'Resolved' })
+                });
+                
+                const data = await response.json();
+                showResult('test3Result', data, response.status);
+                
+                const passed = response.status === 403;
+                updateSummary(3, passed, '403', response.status);
+            } catch (error) {
+                showResult('test3Result', { error: error.message }, 500);
+            }
+        }
+
+        // Test 4: Admin Token
+        async function testAdminToken() {
+            if (!adminToken) {
+                await login();
+            }
+            
+            if (!adminToken) {
+                showResult('test4Result', { error: 'Please login as admin first' }, 400);
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/records/1', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${adminToken}`
+                    },
+                    body: JSON.stringify({ 
+                        status: 'Resolved',
+                        cleaner: 'Security Test',
+                        cleaning_date: new Date().toISOString().split('T')[0]
+                    })
+                });
+                
+                const data = await response.json();
+                showResult('test4Result', data, response.status);
+                
+                const passed = response.status === 200;
+                updateSummary(4, passed, '200', response.status);
+            } catch (error) {
+                showResult('test4Result', { error: error.message }, 500);
+            }
+        }
+
+        // Test 5: Admin Delete
+        async function testAdminDelete() {
+            if (!adminToken) {
+                await login();
+            }
+            
+            if (!adminToken) {
+                showResult('test5Result', { error: 'Please login as admin first' }, 400);
+                return;
+            }
+            
+            // First create a test record
+            try {
+                const createResponse = await fetch('/api/complaint', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: 'Test User',
+                        mobile: '9876543210',
+                        location: 'Test Location',
+                        complaint: 'Test complaint for delete test'
+                    })
+                });
+                const createData = await createResponse.json();
+                
+                if (!createData.success) {
+                    showResult('test5Result', { error: 'Failed to create test record' }, 400);
+                    return;
+                }
+                
+                const recordId = createData.record.record_id;
+                
+                // Now delete it with admin token
+                const response = await fetch(`/api/records/${recordId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${adminToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                showResult('test5Result', data, response.status);
+                
+                const passed = response.status === 200;
+                updateSummary(5, passed, '200', response.status);
+            } catch (error) {
+                showResult('test5Result', { error: error.message }, 500);
+            }
+        }
+
+        // Test 6: Public GET
+        async function testPublicGet() {
+            try {
+                const response = await fetch('/api/records');
+                const data = await response.json();
+                showResult('test6Result', { count: data.length, records: data.slice(0, 3) }, response.status);
+                
+                const passed = response.status === 200;
+                updateSummary(6, passed, '200', response.status);
+            } catch (error) {
+                showResult('test6Result', { error: error.message }, 500);
+            }
+        }
+
+        // =========================
+        // AUTO-RUN TESTS ON LOAD
+        // =========================
+
+        async function runAllTests() {
+            await login();
+            await loginAsUser();
+            await testNoToken();
+            await testFakeToken();
+            await testUserToken();
+            await testAdminToken();
+            await testAdminDelete();
+            await testPublicGet();
+        }
+
+        // =========================
+        // INITIALIZE
+        // =========================
+
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🔐 Security Test Page Loaded');
+            console.log('📝 Test credentials:');
+            console.log('   Admin: admin / admin123');
+            console.log('   User:  user / user123');
+            
+            // Auto-run tests after a short delay
+            setTimeout(runAllTests, 500);
+        });
+
+        // Expose functions for console testing
+        window.testNoToken = testNoToken;
+        window.testFakeToken = testFakeToken;
+        window.testUserToken = testUserToken;
+        window.testAdminToken = testAdminToken;
+        window.testAdminDelete = testAdminDelete;
+        window.testPublicGet = testPublicGet;
+        window.login = login;
+        window.loginAsUser = loginAsUser;
+        window.switchTab = switchTab;
+    </script>
+</body>
+</html>

@@ -232,7 +232,7 @@ http://localhost:3000
 
 ## Explaination Video
 
-https://github.com/user-attachments/assets/967fa047-262d-4827-bae0-78ed8fbadadc
+https://github.com/user-attachments/assets/e61d81c7-f0c5-4be6-9f1c-6dee1cbffbb8
 
 ## Prensentation Slides
 

@@ -238,10 +238,6 @@ https://github.com/user-attachments/assets/e61d81c7-f0c5-4be6-9f1c-6dee1cbffbb8
 
 **[View Presentation on Google Drive](https://drive.google.com/file/d/1qNT8xJwufrBFC7jPNlyDbgLFgDdQmSts/view)**
 
-## Explaination Video
- 
-
-https://github.com/user-attachments/assets/74e687bd-58b9-4c9c-9906-1bcfba7dcf89
 
 
 ---
